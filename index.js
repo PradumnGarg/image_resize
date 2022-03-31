@@ -114,14 +114,14 @@ app.post("/processimage", upload.single("file"), (req, res) => {
      if(width1>width){
        width=width1;
      }
-      processImage(width, height, req, res);
+      processImage(width, null, req, res);
     
     }
     else {
       if (height1 > height) {
         height = height1;
       } 
-        processImage(width, height, req, res);
+        processImage(null, height, req, res);
     }
   });
 
@@ -131,7 +131,7 @@ app.post("/processimage", upload.single("file"), (req, res) => {
     if (req.file) {
       sharp(req.file.path)
         .resize(width, height,{   //Preserving aspect ratio, resize the image to be as large as possible 
-          fit: "fill"           //while ensuring its dimensions are less than or equal to both those specified.
+          fit: "inside"           //while ensuring its dimensions are less than or equal to both those specified.
         })
         .toFile(outputFilePath, (err, info) => {
           if (err) throw err;
