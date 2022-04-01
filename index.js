@@ -1,14 +1,10 @@
+//modules acquired
 const express = require("express");
-
 const app = express();
-
 const bodyParser = require("body-parser");
-
-
 const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
-
 const imageSize=require("image-size");
 const sharp=require("sharp");
 const { fit } = require("sharp");
@@ -16,16 +12,11 @@ const { fit } = require("sharp");
 
 // const imageConversion = require("image-conversion"); #Package used to compress file
 
-
-
-var list = "";
+//variables used
 var width;
 var height;
-
-
 var dir = "public";
 var subDirectory = "public/uploads";
-
 var outputFilePath;
 
 // To create directory on the fly
@@ -36,9 +27,7 @@ if (!fs.existsSync(dir)) {
 }
 
 app.use(express.static("public"));
-
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
 
 
@@ -84,7 +73,6 @@ app.post("/processimage", upload.single("file"), (req, res) => {
     width1 = parseInt(req.body.width);
     height1 = parseInt(req.body.height);
   
-
     //height and width of the original image
     dimensions = imageSize(req.file.path);
       width = parseInt(dimensions.width);
@@ -110,7 +98,13 @@ app.post("/processimage", upload.single("file"), (req, res) => {
      
     //If both the values are specified
     else if (!isNaN(width1) && !isNaN(height1)) {
-
+         
+      if(width1>width){
+        width1=width;
+      }
+      if(height1>height){
+        height1=height;
+      }
       processImage(width1, height1, req, res);
     
   }
