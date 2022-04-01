@@ -84,8 +84,6 @@ app.post("/processimage", upload.single("file"), (req, res) => {
     width1 = parseInt(req.body.width);
     height1 = parseInt(req.body.height);
   
-    // console.log(width);
-    // console.log(height);
 
     //height and width of the original image
     dimensions = imageSize(req.file.path);
@@ -105,24 +103,34 @@ app.post("/processimage", upload.single("file"), (req, res) => {
     imageConversion.compressAccurately(req.file.path,100);
  } */
 
-  
+    //If nothing specified then default dimensions are used
     if (isNaN(width1) && isNaN(height1)) {
-      
       processImage(width, height, req, res);
     } 
+     
+    //If both the values are specified
+    else if (!isNaN(width1) && !isNaN(height1)) {
+
+      processImage(width1, height1, req, res);
+    
+  }
+     //if only width is specified
     else if(!isNaN(width1)){
-     if(width1>width){
+     if(width1<width){
        width=width1;
      }
       processImage(width, null, req, res);
     
     }
-    else {
-      if (height1 > height) {
+
+    //if only height is specified
+    else{
+      if (height1 < height) {
         height = height1;
       } 
         processImage(null, height, req, res);
     }
+    
   });
 
   //Resizes images and converts them to format specified and downloads them
